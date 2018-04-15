@@ -1,6 +1,5 @@
-package com.iansmathew.dragblocks.shapes;
+package com.iansmathew.dragblocks.slots;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -8,21 +7,18 @@ import com.badlogic.gdx.math.Vector2;
 import com.iansmathew.dragblocks.DragBlocks;
 
 /**
- * Created by iansm on 2018-04-14.
+ * Created by iansm on 2018-04-15.
  */
 
-public class BaseShape {
-    DragBlocks game;
-
+public class BaseSlot {
     //Member properties
     private Texture texture;
     private Sprite sprite;
+
     private Vector2 startPos;
 
-    public BaseShape(DragBlocks _game, Vector2 _spawnPos, String _fileName)
+    public BaseSlot(DragBlocks game, Vector2 _spawnPos, String _fileName)
     {
-        game = _game;
-
         texture = new Texture(_fileName);
         sprite = new Sprite(texture);
 
@@ -43,9 +39,9 @@ public class BaseShape {
         sprite.setPosition(x, y);
     }
 
-    public void resetPosition()
+    public Vector2 getPosition()
     {
-        setPosition(startPos.x, startPos.y);
+        return new Vector2(sprite.getX(), sprite.getY());
     }
 
     public void draw(SpriteBatch batch)
