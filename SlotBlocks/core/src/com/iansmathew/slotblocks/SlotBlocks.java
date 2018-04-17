@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -19,10 +20,13 @@ public class SlotBlocks extends ApplicationAdapter {
 	private SpriteBatch batch;
 
 	//GameObjects
-	private final int NUM_SHAPES = 3;
-	private final int NUM_SLOTS = 15;
+	public final int NUM_SHAPES = 3;
+	public final int NUM_SLOTS = 9;
 	private Shape[] shapes;
 	private Slot[] slots;
+
+	private BitmapFont scoreText;
+	private int score = 0;
 
 	//Public getters
 	public Viewport getViewport() {
@@ -49,6 +53,9 @@ public class SlotBlocks extends ApplicationAdapter {
 		createShapes();
 		createSlots();
 
+		scoreText = new BitmapFont();
+		scoreText.getData().setScale(5.0f);
+
 		Gdx.input.setInputProcessor(inputHandler);
 	}
 
@@ -59,6 +66,8 @@ public class SlotBlocks extends ApplicationAdapter {
 
 		for (Slot slot : slots)
 			slot.update(deltaTime);
+
+		checkCollision();
 	}
 
 	@Override
@@ -75,7 +84,35 @@ public class SlotBlocks extends ApplicationAdapter {
 		for (Slot slot : slots)
 			slot.render(batch);
 
+		updateScore();
+
 		batch.end();
+	}
+
+	public void checkCollision()
+	{
+		for (Shape shape : shapes)
+		{
+			for (Slot slot : slots)
+			{
+				if (shape.getSprite().getBoundingRectangle().overlaps(slot.getSprite().getBoundingRectangle()))
+				{
+					if (shape.getShapeType() == slot.getShapeType())
+					{
+						score++;
+						slot.randomizeNewSpawn();
+						inputHandler.touchUp(0, 0, 0, 0);
+					}
+				}
+			}
+		}
+	}
+
+	private void updateScore()
+	{
+		scoreText.draw(batch, "Score: " + Integer.toString(score),
+						0,
+						Gdx.graphics.getHeight() - 10);
 	}
 
 	private void createShapes()
@@ -106,11 +143,14 @@ public class SlotBlocks extends ApplicationAdapter {
 	{
 		int count = 1;
 		float gapSize = 256;
+		float heightGap = 300;
+		float lastSpawnY = Gdx.graphics.getHeight();;
 		for (int i =0; i < NUM_SLOTS; i++)
 		{
 			Vector2 spawnPos = new Vector2(Gdx.graphics.getWidth() / NUM_SHAPES + 1f, Gdx.graphics.getHeight() / 2.f);
 			spawnPos.x += Math.floor((Math.random() * (3))) * gapSize;
-			spawnPos.y = Gdx.graphics.getHeight() + (float)Math.floor((Math.random() * (50))) ;
+			spawnPos.y = lastSpawnY + heightGap;
+			lastSpawnY = spawnPos.y;
 
 			switch (count % 3)
 			{

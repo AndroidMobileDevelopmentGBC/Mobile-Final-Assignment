@@ -31,6 +31,10 @@ public class Shape {
     {
         return sprite;
     }
+    public ShapeType getShapeType() {
+        return shapeType;
+    }
+
 
     public Shape(SlotBlocks _game, Vector2 _spawnPos, ShapeType _shapeType)
     {
@@ -72,6 +76,7 @@ public class Shape {
     {
         position.set(initalPos.x, initalPos.y);
         sprite.setOriginBasedPosition(position.x, position.y);
+
     }
 
 
@@ -82,7 +87,10 @@ public class Shape {
 
     public void update(float deltaTime)
     {
-
+        if (shapeType == ShapeType.Square)
+        {
+            Gdx.app.log("Position", Float.toString(position.y));
+        }
     }
 
     public void dispose()
