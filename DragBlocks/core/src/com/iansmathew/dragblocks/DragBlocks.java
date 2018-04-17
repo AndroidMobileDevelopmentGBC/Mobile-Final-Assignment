@@ -9,26 +9,36 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.iansmathew.dragblocks.shapes.BaseShape;
 import com.iansmathew.dragblocks.slots.BaseSlot;
 
 import java.util.HashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class DragBlocks extends ApplicationAdapter {
+    //Statics
+    private static final int NUM_SHAPES = 3;
+    private static final int NUM_SLOTS = 15;
+
+    //World objects
     private OrthographicCamera camera;
     private Viewport viewport;
     private InputHandler inputHandler;
     private SpriteBatch batch;
 
+    //Game Objects
 	private BaseShape[] shapes;
 	private BaseSlot[] slots;
 
+	//Getters
     public Viewport getViewport() {
         return viewport;
     }
-
     public BaseShape[] getShapes() {
         return shapes;
     }
@@ -43,17 +53,25 @@ public class DragBlocks extends ApplicationAdapter {
 
         //Initialize drawables
 	    batch = new SpriteBatch();
-	    shapes = new BaseShape[2];
-	    slots = new BaseSlot[1];
+	    shapes = new BaseShape[NUM_SHAPES];
+	    slots = new BaseSlot[NUM_SLOTS];
 
         createSlots();
 	    createShapes();
 
         Gdx.input.setInputProcessor(inputHandler); //Let GDX know that this class handles inputs
-	}
+
+        //TODO: Run update on its own thread within fixed time steps
+    }
 
     public void update(float deltaTime)
     {
+        //Update the game objects
+        for (BaseSlot slot : slots)
+            slot.update(deltaTime);
+        for (BaseShape shape : shapes)
+            shape.update(deltaTime);
+
 //        for (int shapeIndex = 0; shapeIndex < shapes.length; shapeIndex++)
 //        {
 //            for (int slotIndex = 0; slotIndex < slots.length; slotIndex++)
@@ -70,7 +88,8 @@ public class DragBlocks extends ApplicationAdapter {
 
     @Override
 	public void render () {
-	    update(Gdx.graphics.getDeltaTime());
+
+        update(Gdx.graphics.getDeltaTime());
 
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -94,26 +113,39 @@ public class DragBlocks extends ApplicationAdapter {
 
     private void createSlots()
     {
-        for (int i =0; i < 1; i++)
+        int count = 1;
+        float gapSize = 256;
+        for (int i =0; i < NUM_SLOTS; i++)
         {
-            Vector2 spawnPos = new Vector2(Gdx.graphics.getWidth() / 2.f, Gdx.graphics.getHeight() / 2.f);
-            slots[i] = new BaseSlot(this, spawnPos, ShapeType.Square);
+            Vector2 spawnPos = new Vector2(Gdx.graphics.getWidth() / NUM_SHAPES + 1f, Gdx.graphics.getHeight() / 2.f);
+            spawnPos.x += Math.floor((Math.random() * (3))) * gapSize;
+            spawnPos.y = Gdx.graphics.getHeight() + (float)Math.floor((Math.random() * (50))) ;
+
+            switch (count % 3)
+            {
+                case 0:
+                    slots[i] = new BaseSlot(this, spawnPos, ShapeType.Square);
+                    break;
+                case 1:
+                    slots[i] = new BaseSlot(this, spawnPos, ShapeType.Triangle);
+                    break;
+                case 2:
+                    slots[i] = new BaseSlot(this, spawnPos, ShapeType.Circle);
+                    break;
+            }
+            count++;
         }
     }
 
     private void createShapes()
     {
         //Initialize shapes
-        int offsetIndex = 0;
-        Texture shapeTex = new Texture("badlogic.jpg");
-        float texWidth = shapeTex.getWidth();
-        shapeTex.dispose();
-
-        for (int i = 0; i < 2; i++)
+        float gapSize = 256;
+        for (int i = 0; i < NUM_SHAPES; i++)
         {
-            Vector2 spawnPos = new Vector2(Gdx.graphics.getWidth() / 5.f, Gdx.graphics.getHeight() / 2.f);
+            Vector2 spawnPos = new Vector2(Gdx.graphics.getWidth() / NUM_SHAPES + 1f, Gdx.graphics.getHeight() / 2.f);
             spawnPos.y = Gdx.graphics.getHeight() - (Gdx.graphics.getHeight() *  90) / 100.f; //set sprites to 10% from the lower part of screen
-            spawnPos.x += offsetIndex * texWidth;
+            spawnPos.x += i * gapSize;
 
             String imageFileName = "shapes/shape" + i+1 + ".png";
 
@@ -129,8 +161,6 @@ public class DragBlocks extends ApplicationAdapter {
                     shapes[i] = new BaseShape(this, spawnPos, ShapeType.Circle);
                     break;
             }
-
-            offsetIndex++;
         }
     }
 	

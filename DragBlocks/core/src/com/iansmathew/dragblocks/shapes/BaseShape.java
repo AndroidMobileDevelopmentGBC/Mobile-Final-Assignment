@@ -28,7 +28,6 @@ public class BaseShape {
         startPos = _spawnPos;
         setTexture();
         sprite = new Sprite(this.texture);
-
         setPosition(startPos.x, startPos.y);;
     }
 

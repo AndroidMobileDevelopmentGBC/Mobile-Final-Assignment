@@ -14,6 +14,7 @@ import com.iansmathew.dragblocks.ShapeType;
 
 public class BaseSlot {
     private DragBlocks game;
+    private float SPEED = 1.0f;
 
     //Member properties
     private Texture texture;
@@ -21,11 +22,14 @@ public class BaseSlot {
     private Vector2 startPos;
     private ShapeType shapeType;
 
+    private float rowPos;
+
     public BaseSlot(DragBlocks _game, Vector2 _spawnPos, ShapeType _type)
     {
         game = _game;
         shapeType = _type;
         startPos = _spawnPos;
+        rowPos = _spawnPos.x;
         setTexture();
         sprite = new Sprite(this.texture);
 
@@ -59,6 +63,13 @@ public class BaseSlot {
     public void resetPosition()
     {
 
+    }
+
+    public void update(float delaTime)
+    {
+        Vector2 currentPos = new Vector2(sprite.getX(), sprite.getY());
+        currentPos.y -= SPEED * delaTime;
+        setPosition(rowPos, currentPos.y);
     }
 
     public void draw(SpriteBatch batch)
