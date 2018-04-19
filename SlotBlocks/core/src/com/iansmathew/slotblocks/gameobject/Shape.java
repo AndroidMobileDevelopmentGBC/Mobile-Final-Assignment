@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.iansmathew.slotblocks.ShapeType;
 import com.iansmathew.slotblocks.SlotBlocks;
+import com.iansmathew.slotblocks.states.PlayState;
 
 /**
  * Created by iansm on 2018-04-17.
@@ -14,7 +15,7 @@ import com.iansmathew.slotblocks.SlotBlocks;
 
 public class Shape {
     //Game Ref
-    private SlotBlocks game;
+    private PlayState game;
 
     private float movementSpeed = 0.f;
 
@@ -36,7 +37,7 @@ public class Shape {
     }
 
 
-    public Shape(SlotBlocks _game, Vector2 _spawnPos, ShapeType _shapeType)
+    public Shape(PlayState _game, Vector2 _spawnPos, ShapeType _shapeType)
     {
         game = _game;
         position = new Vector2();
@@ -53,13 +54,13 @@ public class Shape {
         switch (shapeType)
         {
             case Square:
-                texture = new Texture(Gdx.files.internal("shapes/blueSquare.png"));
+                texture = new Texture(Gdx.files.internal("shapes/redSquare.png"));
                 break;
             case Circle:
-                texture = new Texture(Gdx.files.internal("shapes/blueCircle.png"));
+                texture = new Texture(Gdx.files.internal("shapes/redCircle.png"));
                 break;
             case Triangle:
-                texture = new Texture(Gdx.files.internal("shapes/blueTriangle.png"));
+                texture = new Texture(Gdx.files.internal("shapes/redTriangle.png"));
                 break;
         }
         sprite = new Sprite(texture);

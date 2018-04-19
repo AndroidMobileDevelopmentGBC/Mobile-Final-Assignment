@@ -3,6 +3,7 @@ package com.iansmathew.slotblocks;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.iansmathew.slotblocks.gameobject.Shape;
+import com.iansmathew.slotblocks.states.PlayState;
 
 /**
  * Created by iansm on 2018-04-17.
@@ -11,10 +12,10 @@ import com.iansmathew.slotblocks.gameobject.Shape;
 public class InputHandler implements InputProcessor{
     private static final int NUM_FINGERS_SUPPORTED = 1;
 
-    private SlotBlocks game;
+    private PlayState game;
     private Shape currentShapeToHandle;
 
-    public InputHandler(SlotBlocks gameRef)
+    public InputHandler(PlayState gameRef)
     {
         this.game = gameRef;
     }

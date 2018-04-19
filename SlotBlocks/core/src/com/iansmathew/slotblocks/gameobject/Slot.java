@@ -4,16 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.iansmathew.slotblocks.ShapeType;
 import com.iansmathew.slotblocks.SlotBlocks;
+import com.iansmathew.slotblocks.states.PlayState;
 
 /**
  * Created by iansm on 2018-04-17.
  */
 
 public class Slot {
-    private SlotBlocks game;
+    private PlayState game;
     private float movementSpeed = -300.f;
 
     private Vector2 initalPos;
@@ -31,7 +33,7 @@ public class Slot {
         return shapeType;
     }
 
-    public Slot(SlotBlocks _game, Vector2 _spawnPos, ShapeType _shapeType)
+    public Slot(PlayState _game, Vector2 _spawnPos, ShapeType _shapeType)
     {
         game = _game;
         position = new Vector2();
@@ -77,9 +79,11 @@ public class Slot {
 
     public void randomizeNewSpawn()
     {
+        int[] spawnPercents = {20, 40, 60, 80};
+
         Vector2 newSpawn = new Vector2();
-        newSpawn.x = Gdx.graphics.getWidth() / game.NUM_SHAPES + 1f;
-        newSpawn.x += Math.floor((Math.random() * (3))) * 256;
+        int randIndex = MathUtils.random(spawnPercents.length - 1);
+        newSpawn.x = (Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() *  spawnPercents[randIndex]) / 100.f);
         newSpawn.y = (float)(Gdx.graphics.getHeight() + Math.floor((Math.random() * (5)) * 256));
 
         setPosition(newSpawn.x, newSpawn.y);
