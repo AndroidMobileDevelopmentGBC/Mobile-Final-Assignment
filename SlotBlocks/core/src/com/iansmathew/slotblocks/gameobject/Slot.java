@@ -16,7 +16,7 @@ import com.iansmathew.slotblocks.states.PlayState;
 
 public class Slot {
     private PlayState game;
-    private float movementSpeed = -300.f;
+    public static float movementSpeed = -300.f;
 
     private Vector2 initalPos;
     private Vector2 position;

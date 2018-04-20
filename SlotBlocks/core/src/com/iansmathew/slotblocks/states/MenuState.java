@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by iansm on 2018-04-19.
@@ -47,7 +48,20 @@ public class MenuState extends State {
     @Override
     protected void update(float dt) {
         if (Gdx.input.justTouched())
-            stateMachine.set(new PlayState(stateMachine));
+        {
+            Vector2 mousePos = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+            Vector2 mousePosInWorld = viewport.unproject(mousePos);
+
+            if (playButton.getBoundingRectangle().contains(mousePosInWorld))
+            {
+                stateMachine.set(new PlayState(stateMachine));
+            }
+            else if (exitButton.getBoundingRectangle().contains(mousePosInWorld))
+            {
+                Gdx.app.exit();
+            }
+        }
+
     }
 
     @Override

@@ -47,6 +47,7 @@ public class SlotBlocks extends ApplicationAdapter {
 	@Override
 	public void resume() {
 		super.resume();
+
 	}
 
 	@Override

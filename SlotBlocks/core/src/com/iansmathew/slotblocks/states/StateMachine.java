@@ -10,6 +10,7 @@ import java.util.Stack;
 
 public class StateMachine {
     private Stack<State> states;
+    public int getStateLength() {return states.size(); }
 
     public StateMachine()
     {

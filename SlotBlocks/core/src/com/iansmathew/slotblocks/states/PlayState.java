@@ -66,6 +66,8 @@ public class PlayState extends State {
             slot.update(dt);
 
         checkCollision();
+
+        Slot.movementSpeed -= 0.05f;
     }
 
     @Override
@@ -155,8 +157,6 @@ public class PlayState extends State {
 
             spawnPos.y = lastSpawnY + heightGap;
             lastSpawnY = spawnPos.y;
-
-            //spawnPos.x = (Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() *  66.66666f) / 100.f);
 
             switch (count % 3)
             {
